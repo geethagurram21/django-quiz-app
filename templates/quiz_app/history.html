@@ -1,0 +1,21 @@
+{% extends 'quiz_app/base.html' %}
+{% block content %}
+<h3>Your Past Quizzes</h3>
+<table class="table">
+  <thead><tr><th>ID</th><th>Date</th><th>Score</th><th>Questions</th><th>Duration</th><th>View</th></tr></thead>
+  <tbody>
+    {% for a in attempts %}
+      <tr>
+        <td>{{ a.id }}</td>
+        <td>{{ a.started_at }}</td>
+        <td>{{ a.score }}</td>
+        <td>{{ a.total_questions }}</td>
+        <td>{{ a.duration_seconds }}</td>
+        <td><a class="btn btn-sm btn-primary" href="{% url 'quiz_app:quiz_result' a.id %}">View</a></td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="6">No attempts yet</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

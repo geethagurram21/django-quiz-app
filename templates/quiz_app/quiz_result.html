@@ -1,0 +1,27 @@
+{% extends 'quiz_app/base.html' %}
+{% block content %}
+<h3>Result — Score: {{ attempt.score }} / {{ attempt.total_questions }}</h3>
+<p>Duration: {{ attempt.duration_seconds }} seconds</p>
+{% for item in display %}
+  <div class="card mb-2 {% if item.is_correct %}border-success{% else %}border-danger{% endif %}">
+    <div class="card-body">
+      <p><strong>Q{{ forloop.counter }}.</strong> {{ item.text }}</p>
+      <ul class="list-group">
+        {% for opt in item.options %}
+          {% if forloop.counter0 == item.correct_index %}
+            <li class="list-group-item list-group-item-success">
+              <strong>{{ opt }}</strong>
+              {% if forloop.counter0 == item.chosen_index %} — Your answer (Correct){% elif item.chosen_index != None and forloop.counter0 == item.chosen_index %} — Your answer (Wrong){% endif %}
+            </li>
+          {% elif forloop.counter0 == item.chosen_index %}
+            <li class="list-group-item list-group-item-danger">{{ opt }} — Your answer</li>
+          {% else %}
+            <li class="list-group-item">{{ opt }}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+      <div class="mt-2"><small>Module: {{ item.module }}</small></div>
+    </div>
+  </div>
+{% endfor %}
+{% endblock %}

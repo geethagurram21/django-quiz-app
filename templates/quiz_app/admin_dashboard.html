@@ -1,0 +1,24 @@
+{% extends 'quiz_app/base.html' %}
+{% block content %}
+<h3>Admin Dashboard</h3>
+<ul>
+  <li>Total users: {{ total_users }}</li>
+  <li>Total attempts: {{ total_attempts }}</li>
+  <li>Average score: {{ avg_score|default:"N/A" }}</li>
+</ul>
+<h4>Latest attempts</h4>
+<table class="table">
+  <thead><tr><th>ID</th><th>User</th><th>Date</th><th>Score</th><th>View</th></tr></thead>
+  <tbody>
+    {% for a in latest_attempts %}
+      <tr>
+        <td>{{ a.id }}</td>
+        <td>{{ a.user.username }}</td>
+        <td>{{ a.started_at }}</td>
+        <td>{{ a.score }}</td>
+        <td><a class="btn btn-sm btn-secondary" href="{% url 'quiz_app:quiz_result' a.id %}">View</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

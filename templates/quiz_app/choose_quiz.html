@@ -1,0 +1,8 @@
+{% extends 'quiz_app/base.html' %}
+{% block content %}
+  <h3>Choose modules for quiz</h3>
+  <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary">Start Quiz (30 Q / 30 min)</button>
+  </form>
+{% endblock %}

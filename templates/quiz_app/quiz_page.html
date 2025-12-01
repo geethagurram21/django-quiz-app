@@ -1,0 +1,43 @@
+{% extends 'quiz_app/base.html' %}
+{% block content %}
+<h3>Quiz ({{ attempt.total_questions }} questions)</h3>
+<div class="mb-3">
+  <span id="timer" class="h5 text-danger"></span>
+</div>
+<form id="quiz-form" method="post" action="{% url 'quiz_app:submit_quiz' attempt.id %}">
+  {% csrf_token %}
+  {% for q in qlist %}
+    <div class="card mb-2 p-2">
+      <div class="card-body">
+        <p><strong>Q{{ forloop.counter }}.</strong> {{ q.text }}</p>
+        {% for opt in q.options %}
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="response_{{ q.response_id }}" id="r_{{ q.response_id }}_{{ forloop.counter0 }}" value="{{ forloop.counter0 }}"
+            {% if q.chosen_index == forloop.counter0 %}checked{% endif %}>
+            <label class="form-check-label" for="r_{{ q.response_id }}_{{ forloop.counter0 }}">{{ opt }}</label>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+  <button class="btn btn-success" type="submit">Submit Quiz</button>
+</form>
+<script>
+  let remaining = {{ remaining_seconds|default:1800 }};
+  const timerEl = document.getElementById('timer');
+  function fmt(s){
+    let m = Math.floor(s/60); let sec = s%60;
+    return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+  }
+  function tick(){
+    timerEl.textContent = 'Time left: ' + fmt(remaining);
+    if(remaining <= 0){
+      document.getElementById('quiz-form').submit();
+    } else {
+      remaining--;
+      setTimeout(tick, 1000);
+    }
+  }
+  tick();
+</script>
+{% endblock %}
